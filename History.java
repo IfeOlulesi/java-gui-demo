@@ -18,14 +18,17 @@ public class History {
         String[] words = Arrays.copyOfRange(wordss, 1, wordss.length);
 
         String top = "";
+
+        if (words.length == 0) {
+            return top;
+        }
+
         if (btn == Arrow.Up) {
             updateLastRequested(Arrow.Up, words.length);
             top = words[lastRequested];
-
         }
         if (btn == Arrow.Down) {
             updateLastRequested(Arrow.Down, words.length);
-            System.out.println(lastRequested);
             top = words[lastRequested];
         }
         return top;
