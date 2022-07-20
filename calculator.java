@@ -1,15 +1,20 @@
 import java.awt.*;
 import java.awt.event.*;
+// import History;
 
-public class calculator implements ActionListener{
-    int c,n;
-    String s1,s2,s3,s4,s5;
+public class calculator implements ActionListener {
+    int c, n;
+    int pos = 0;
+    String s1, s2, s3, s4, s5;
     Frame f;
-    Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, badd, bsub, bmul, bdiv, beq, bclr;
+    Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, badd, bsub, bmul, bdiv, beq, bclr, up, down;
     Panel p;
     TextField t1;
+    TextField historyField;
     GridLayout g;
-    calculator(){
+    History history = new History();
+
+    calculator() {
         f = new Frame("Calculator");
         f.setLayout(new FlowLayout());
         p = new Panel();
@@ -61,9 +66,21 @@ public class calculator implements ActionListener{
         bclr = new Button("CLR");
         bclr.addActionListener(this);
 
+        up = new Button("↑");
+        up.addActionListener(this);
+
+        down = new Button("↓");
+        down.addActionListener(this);
+
         t1 = new TextField(20);
+        historyField = new TextField(20);
+        historyField.setEditable(false);
+        historyField.setEnabled(false);
+
+        f.add(historyField);
         f.add(t1);
-        g = new GridLayout(4,4);
+
+        g = new GridLayout(4, 4);
         p.setLayout(g);
 
         p.add(b0);
@@ -85,9 +102,11 @@ public class calculator implements ActionListener{
         p.add(bdiv);
         p.add(beq);
         p.add(bclr);
+        p.add(up);
+        p.add(down);
 
         f.add(p);
-        f.setSize(200,180);
+        f.setSize(200, 210);
         f.setVisible(true);
         f.setBackground(Color.LIGHT_GRAY);
         f.addWindowListener(new WindowAdapter() {
@@ -99,113 +118,133 @@ public class calculator implements ActionListener{
 
     }
 
+    public void pass() {
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==b0){
+        if (e.getSource() == b0) {
             s3 = t1.getText();
             s4 = "0";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b1){
+        if (e.getSource() == b1) {
             s3 = t1.getText();
             s4 = "1";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b2){
+        if (e.getSource() == b2) {
             s3 = t1.getText();
             s4 = "2";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b3){
+        if (e.getSource() == b3) {
             s3 = t1.getText();
             s4 = "3";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b4){
+        if (e.getSource() == b4) {
             s3 = t1.getText();
             s4 = "4";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b5){
+        if (e.getSource() == b5) {
             s3 = t1.getText();
             s4 = "5";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b6){
+        if (e.getSource() == b6) {
             s3 = t1.getText();
             s4 = "6";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b7){
+        if (e.getSource() == b7) {
             s3 = t1.getText();
             s4 = "7";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b8){
+        if (e.getSource() == b8) {
             s3 = t1.getText();
             s4 = "8";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==b9){
+        if (e.getSource() == b9) {
             s3 = t1.getText();
             s4 = "9";
             s5 = s3 + s4;
             t1.setText(s5);
         }
-        if(e.getSource()==badd){
+        if (e.getSource() == badd) {
             s1 = t1.getText();
             t1.setText("");
             c = 1;
         }
-        if(e.getSource()==bsub){
+        if (e.getSource() == bsub) {
             s1 = t1.getText();
             t1.setText("");
             c = 2;
         }
-        if(e.getSource()==bmul){
+        if (e.getSource() == bmul) {
             s1 = t1.getText();
             t1.setText("");
             c = 3;
         }
-        if(e.getSource()==bdiv){
+        if (e.getSource() == bdiv) {
             s1 = t1.getText();
             t1.setText("");
             c = 4;
         }
-        if(e.getSource()==beq){
+
+        if (e.getSource() == up) {
+            historyField.setText(history.getValue(Arrow.Up));
+        }
+        if (e.getSource() == down) {
+            historyField.setText(history.getValue(Arrow.Down));
+        }
+        if (e.getSource() == beq) {
             s2 = t1.getText();
-            if(c==1){
+            if (c == 1) {
                 n = Integer.parseInt(s1) + Integer.parseInt(s2);
                 t1.setText(String.valueOf(n));
+                String content = s1 + "+" + s2 + "=" + n;
+                history.addToHistory(content);
             }
-            if(c==2){
+            if (c == 2) {
                 n = Integer.parseInt(s1) - Integer.parseInt(s2);
                 t1.setText(String.valueOf(n));
+                String content = s1 + "-" + s2 + "=" + n;
+                history.addToHistory(content);
             }
-            if(c==3){
+            if (c == 3) {
                 n = Integer.parseInt(s1) * Integer.parseInt(s2);
                 t1.setText(String.valueOf(n));
+                String content = s1 + "*" + s2 + "=" + n;
+                history.addToHistory(content);
             }
-            if(c==4){
+            if (c == 4) {
                 n = Integer.parseInt(s1) / Integer.parseInt(s2);
                 t1.setText(String.valueOf(n));
+                String content = s1 + "/" + s2 + "=" + n;
+                history.addToHistory(content);
             }
         }
-        if(e.getSource()==bclr){
+        if (e.getSource() == bclr) {
             t1.setText("");
         }
     }
 
     public static void main(String[] args) {
         calculator c = new calculator();
+        c.pass();
     }
 }
